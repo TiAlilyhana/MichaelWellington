@@ -16,6 +16,7 @@
             overflow: hidden;
             text-align: center;
         }
+
         .heart-float {
             position: absolute;
             color: #ff69b4;
@@ -27,6 +28,7 @@
             0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
+
         .popup {
             background: white;
             padding: 40px;
@@ -36,9 +38,18 @@
             z-index: 10;
             border: 3px solid #ffb6c1;
         }
+
         h1 { color: #d63384; margin-bottom: 20px; }
         p { color: #444; line-height: 1.8; font-size: 19px; }
-        #yt-player { position: absolute; width: 0; height: 0; border: 0; }
+
+        #yt-player {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 0;
+            pointer-events: none;
+        }
+
         .play-btn {
             background: #ff69b4;
             color: white;
@@ -49,27 +60,58 @@
             cursor: pointer;
             margin-top: 20px;
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            transition: 0.3s;
         }
+        .play-btn:hover { background: #d63384; transform: scale(1.05); }
     </style>
 </head>
 <body>
-    <iframe id="yt-player" src="https://www.youtube.com" allow="autoplay"></iframe>
+
+    <!-- Updated YouTube Embed with "No Place" ID -->
+    <iframe id="yt-player" 
+        src="https://www.youtube.com" 
+        allow="autoplay">
+    </iframe>
+
     <div class="popup">
         <h1>Happy Valentine's Day, Michael! ❤️</h1>
         <p>
             To <strong>Michael St Lloyd Wellington</strong>,<br><br>
-            I love you more than words can say. You make every day brighter, and I am so lucky to have you.
+            "There ain't no place, ain't no place like you."<br>
+            I love you always and forever.
         </p>
-        <button class="play-btn" onclick="startEverything()">💖 Open My Heart 💖</button>
-        <p style="font-style: italic; color: #ff69b4; margin-top: 25px;">With all my love, always.</p>
+        
+        <button class="play-btn" onclick="unmuteAndStart()">💖 Open My Heart & Music 💖</button>
+        
+        <p style="font-style: italic; color: #ff69b4; margin-top: 25px;">
+            With all my love, always.
+        </p>
     </div>
+
     <script>
-        function startEverything() {
-            const player = document.getElementById('yt-player');
-            player.src += "&autoplay=1";
+        // Load the YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player');
+        }
+
+        function unmuteAndStart() {
+            // Unmute and ensure it's playing
+            if (player) {
+                player.unMute();
+                player.playVideo();
+            }
+            
+            // Hide button and start hearts
             document.querySelector('.play-btn').style.display = 'none';
             setInterval(createHeart, 300);
         }
+
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart-float');
