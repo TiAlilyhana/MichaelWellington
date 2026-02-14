@@ -11,60 +11,99 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #ffe4e1;
+            background: #ffe4e1; /* Soft Pink */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
             text-align: center;
         }
+
         .popup {
             background: white;
             padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 450px;
-            border: 3px solid #ffb6c1;
-        }
-        h1 { color: #d63384; margin-bottom: 10px; }
-        p { color: #555; font-size: 18px; margin-bottom: 20px; }
-        
-        /* The Video Box */
-        .video-wrapper {
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 500px;
+            z-index: 10;
+            border: 4px solid #ffb6c1;
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 15px;
-            background: #eee;
-            margin-bottom: 20px;
         }
-        .video-wrapper iframe {
+
+        h1 { color: #d63384; font-size: 28px; margin-bottom: 20px; }
+        
+        .sweet-paragraph {
+            color: #444;
+            line-height: 1.8;
+            font-size: 19px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .heart-emoji { color: #ff69b4; font-size: 24px; }
+
+        /* The Button */
+        .song-button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: 0.3s ease;
+        }
+        .song-button:hover {
+            background: #d63384;
+            transform: scale(1.05);
+        }
+
+        /* Floating Hearts Animation */
+        .heart-float {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            color: #ffb6c1;
+            font-size: 20px;
+            animation: float 6s linear infinite;
+            z-index: 1;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="popup">
-        <h1>Happy Valentine's Day, Michael!</h1>
-        <p>❤️</p>
-        <p>I love you always and forever. Click the video to hear our song!</p>
+        <h1>Happy Valentine's Day, Michael! <span class="heart-emoji">❤️</span></h1>
         
-        <!-- DIRECT YOUTUBE EMBED -->
-        <div class="video-wrapper">
-            <iframe 
-                src="https://www.youtube.com" 
-                title="Backstreet Boys - No Place" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
-            </iframe>
+        <div class="sweet-paragraph">
+            To my incredible <strong>Michael St Lloyd Wellington</strong>,<br><br>
+            Every day with you feels like a beautiful dream that I never want to wake up from. You are my safe place, my best friend, and the greatest love I have ever known. Your laugh is my favorite song, and your heart is the only place I ever want to be. Thank you for choosing me every single day. I love you always and forever, with all that I am.
         </div>
 
-        <p style="font-style: italic; color: #ff69b4;">"There ain't no place like you."</p>
+        <a href="https://youtu.be" class="song-button" target="_blank">
+            🎶 Play Our Song 🎶
+        </a>
+
+        <p style="margin-top: 25px; font-style: italic; color: #ff69b4;">
+            "There ain't no place like you..."
+        </p>
     </div>
 
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-float');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 400);
+    </script>
 </body>
 </html>
