@@ -9,100 +9,86 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: #ffe4e1;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
             text-align: center;
         }
         .popup {
             background: white;
-            padding: 40px;
-            border-radius: 25px;
+            padding: 30px;
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 450px;
-            z-index: 10;
+            max-width: 500px;
             border: 3px solid #ffb6c1;
+            margin-bottom: 20px;
         }
-        h1 { color: #d63384; margin-bottom: 20px; }
-        p { color: #444; line-height: 1.8; font-size: 19px; }
-        /* Fully hide the player but keep it functional */
-        #yt-player {
-            position: absolute;
-            width: 0; height: 0; border: 0;
-            opacity: 0; pointer-events: none;
+        h1 { color: #d63384; }
+        /* The Video Player */
+        #video-container {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 16 / 9;
+            margin-top: 15px;
         }
         .play-btn {
-            background: #ff69b4; color: white; border: none;
-            padding: 15px 35px; border-radius: 50px;
-            font-size: 20px; cursor: pointer; margin-top: 20px;
-            font-weight: bold; transition: 0.3s;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 22px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
+            animation: pulse 1.5s infinite;
         }
-        .play-btn:hover { background: #d63384; transform: scale(1.1); }
-        .heart-float {
-            position: absolute; color: #ff69b4; font-size: 20px;
-            animation: float 5s linear infinite; pointer-events: none;
-        }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Hidden Player with correct ID for "No Place" -->
-    <iframe id="yt-player" 
-        src="https://www.youtube.com" 
-        allow="autoplay">
-    </iframe>
-
     <div class="popup">
         <h1>Happy Valentine's Day, Michael! ❤️</h1>
-        <p>
-            To my wonderful <strong>Michael St Lloyd Wellington</strong>,<br><br>
-            I love you more than words can say. You make every day feel like a dream, and I'm so lucky you're mine.<br>
-            I love you always and forever.
-        </p>
-        <button class="play-btn" onclick="startSurprise()">💖 Open My Heart 💖</button>
-        <p style="font-style: italic; color: #ff69b4; margin-top: 25px;">With all my love, always.</p>
+        <p>I love you always and forever. Click below to hear our song!</p>
+        
+        <!-- The YouTube Player -->
+        <div id="video-container">
+            <iframe id="player" width="100%" height="100%" 
+                src="https://www.youtube.com" 
+                frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+
+        <br>
+        <button class="play-btn" onclick="playMusic()">🎵 PLAY OUR SONG 🎵</button>
     </div>
 
     <script>
-        // Official YouTube API setup
+        // Load the YouTube API
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
+        var firstScriptTag = document.getElementsByTagName('script');
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         var player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player');
+            player = new YT.Player('player');
         }
 
-        function startSurprise() {
-            // Unmute and Play the background music
-            if (player && typeof player.playVideo === 'function') {
-                player.unMute();
-                player.playVideo();
-            } else {
-                // Emergency backup if API loads slowly
-                document.getElementById('yt-player').src += "&autoplay=1";
+        function playMusic() {
+            if (player && player.playVideo) {
+                player.unMute(); // Ensure sound is on
+                player.setVolume(100); // Max volume
+                player.playVideo(); // Start the song
             }
-            // Hide the button and start the hearts
-            document.querySelector('.play-btn').style.display = 'none';
-            setInterval(createHeart, 300);
-        }
-
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-float');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
+            // Optional: Hide the button after he clicks it
+            document.querySelector('.play-btn').innerHTML = "🎶 Playing...";
         }
     </script>
 </body>
